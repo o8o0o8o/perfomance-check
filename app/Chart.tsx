@@ -172,13 +172,19 @@ const SingleTest = ({ json, svg, calcNode }: any) => {
   );
 };
 
-export default function Chart({ results }: { results: any[] }) {
+export default function Chart({
+  results,
+  audits,
+}: {
+  results: any[];
+  audits: {};
+}) {
   const ref = useRef<SVGSVGElement>(null);
   const width = 1000;
   const height = 800;
-
   const xOffset = 50;
   const yOffset = 10;
+
   const xScale = scaleLinear()
     .domain([
       0,
@@ -239,6 +245,7 @@ export default function Chart({ results }: { results: any[] }) {
         ))}
       </form>
       <svg ref={ref} width={width} height={height} />
+      <div className="w-full">{JSON.stringify(audits, null, 2)}</div>
     </>
   );
 }

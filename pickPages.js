@@ -32,9 +32,19 @@ async function main() {
   const files = getJSONFiles(folder);
 
   const sorted = [];
-
+  let auditsResult = {};
   for (const file of files) {
     const data = await JSON.parse(fs.readFileSync(file, "utf-8"));
+
+    const audits = {};
+
+    Object.entries(data.audits).forEach(([key, value]) => {
+      if (typeof value.score === "number" && value.score !== 1) {
+        audits[key] = value;
+      }
+    });
+
+    auditsResult = { ...auditsResult, ...audits };
 
     sorted.push({
       file,
@@ -60,6 +70,11 @@ async function main() {
   fs.writeFileSync(
     join(process.cwd(), "perf", "pickedWorst"),
     worst.map((data) => data.url).join(", ")
+  );
+
+  fs.writeFileSync(
+    join(process.cwd(), "perf", "audits.json"),
+    JSON.stringify(auditsResult)
   );
 }
 

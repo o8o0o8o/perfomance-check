@@ -4,11 +4,16 @@ import fs from "fs";
 
 export default async function Home() {
   const results = [];
+  let audits = {};
 
   try {
     const BASIC_FOLDER = "perf";
     const currentFolder = join(process.cwd(), BASIC_FOLDER);
     const files = fs.readdirSync(currentFolder);
+
+    audits = await JSON.parse(
+      fs.readFileSync(join(currentFolder, "audits.json"), "utf-8")
+    );
 
     for (const file of files) {
       if (file.includes("results") && file.endsWith("json")) {
@@ -26,7 +31,7 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between px-24">
-      <Chart results={results} />
+      <Chart results={results} audits={audits} />
     </main>
   );
 }
