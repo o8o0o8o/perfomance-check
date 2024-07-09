@@ -17,4 +17,8 @@ export default defineConfig({
       process.exit(0);
     },
   },
+  chrome: {
+    // forces the fallback to be used
+    useSystem: false,
+  },
 });
